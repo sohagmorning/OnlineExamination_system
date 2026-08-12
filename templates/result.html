@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result - Online Exam System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h2>Online Exam System</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="result-hero">
+        <div class="score-circle">
+            <span class="score-number">{{ score }}</span>
+            <span class="score-label">/ {{ total }}</span>
+        </div>
+
+        {% set percentage = ((score / total) * 100) | int %}
+        <p style="color:#4db8ff; margin-bottom:10px; font-size:15px;">📚 {{ subject['name'] }}</p>
+
+        {% if percentage >= 80 %}
+            <h2>🎉 Excellent Result!</h2>
+            <p>You scored {{ percentage }}%. Outstanding performance!</p>
+        {% elif percentage >= 50 %}
+            <h2>✅ Congratulations! You Passed!</h2>
+            <p>You scored {{ percentage }}%. Keep it up!</p>
+        {% else %}
+            <h2>❌ Better luck next time!</h2>
+            <p>You scored {{ percentage }}%. Try again!</p>
+        {% endif %}
+    </div>
+
+    <div class="container">
+
+        <h3 class="section-title">📋 Detailed Result</h3>
+
+        {% for d in details %}
+        <div class="result-card {{ 'correct' if d['is_correct'] else 'wrong' }}">
+            <div class="q-text">{{ loop.index }}. {{ d['question'] }}</div>
+
+            <div class="answer-info">
+                Your answer:
+                {% if d['your_answer'] == 'A' %}
+                    <span class="{{ 'correct-text' if d['is_correct'] else 'wrong-text' }}">(A) {{ d['option_a'] }}</span>
+                {% elif d['your_answer'] == 'B' %}
+                    <span class="{{ 'correct-text' if d['is_correct'] else 'wrong-text' }}">(B) {{ d['option_b'] }}</span>
+                {% elif d['your_answer'] == 'C' %}
+                    <span class="{{ 'correct-text' if d['is_correct'] else 'wrong-text' }}">(C) {{ d['option_c'] }}</span>
+                {% elif d['your_answer'] == 'D' %}
+                    <span class="{{ 'correct-text' if d['is_correct'] else 'wrong-text' }}">(D) {{ d['option_d'] }}</span>
+                {% else %}
+                    <span class="wrong-text">Not answered</span>
+                {% endif %}
+            </div>
+
+            {% if not d['is_correct'] %}
+            <div class="answer-info">
+                Correct answer:
+                {% if d['correct_answer'] == 'A' %}
+                    <span class="correct-text">(A) {{ d['option_a'] }}</span>
+                {% elif d['correct_answer'] == 'B' %}
+                    <span class="correct-text">(B) {{ d['option_b'] }}</span>
+                {% elif d['correct_answer'] == 'C' %}
+                    <span class="correct-text">(C) {{ d['option_c'] }}</span>
+                {% elif d['correct_answer'] == 'D' %}
+                    <span class="correct-text">(D) {{ d['option_d'] }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="result-actions">
+            <a href="/exam/{{ subject['id'] }}" class="btn">🔄 Try Again</a>
+            <a href="/dashboard" class="btn btn-green">🏠 Back to Dashboard</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

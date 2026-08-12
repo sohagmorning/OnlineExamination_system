@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <div class="logo">
+            <h2>Online Exam System</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Student Login</a></li>
+                <li><a href="/admin-login">Teacher Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome To Online Exam System</h1>
+            <p>Take exams anytime, anywhere with a secure and modern platform.</p>
+            <div class="hero-buttons">
+                <a href="/login" class="btn">Student Login</a>
+                <a href="/admin-login" class="btn">Teacher Login</a>
+                <a href="/register" class="btn btn-green">Register</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="card">
+            <h3>Online Exam</h3>
+            <p>Attend MCQ exams from anywhere.</p>
+        </div>
+        <div class="card">
+            <h3>Instant Result</h3>
+            <p>View your result immediately after submission.</p>
+        </div>
+        <div class="card">
+            <h3>Login</h3>
+            <p>Student and Teacher have separate login panels.</p>
+        </div>
+    </section>
+
+</body>
+</html>

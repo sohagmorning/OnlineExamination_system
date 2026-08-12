@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam - {{ subject['name'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="exam-header">
+        <h2>📝 {{ subject['name'] }} Exam</h2>
+        <div class="timer-box" id="timer">⏱ 10:00</div>
+    </div>
+
+    <div class="exam-container">
+        <form method="POST" action="/submit_exam" id="examForm">
+
+            <input type="hidden" name="subject_id" value="{{ subject['id'] }}">
+
+            {% for q in questions %}
+            <div class="question-card">
+                <div class="question-number">Question {{ loop.index }} / {{ questions | length }}</div>
+                <div class="question-text">{{ q['question_text'] }}</div>
+
+                <ul class="options-list">
+                    <li>
+                        <label>
+                            <input type="radio" name="q{{ q['id'] }}" value="A">
+                            <span>(A) {{ q['option_a'] }}</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="q{{ q['id'] }}" value="B">
+                            <span>(B) {{ q['option_b'] }}</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="q{{ q['id'] }}" value="C">
+                            <span>(C) {{ q['option_c'] }}</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="q{{ q['id'] }}" value="D">
+                            <span>(D) {{ q['option_d'] }}</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+
+            <div class="submit-section">
+                <button type="submit" class="btn btn-green">✅ Submit Exam</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+
+</body>
+</html>

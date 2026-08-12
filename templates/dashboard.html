@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Online Exam System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h2>Online Exam System</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+
+        <div class="welcome-card">
+            <h2>Welcome, {{ session['username'] }}!</h2>
+            <p>Select a subject below to start your exam.</p>
+        </div>
+
+        <!-- Subject Cards -->
+        <h3 class="section-title">📚 Choose a Subject</h3>
+
+        {% if subjects %}
+            <div class="subject-grid">
+                {% for subject in subjects %}
+                <a href="/exam/{{ subject['id'] }}" class="subject-card">
+                    <div class="subject-icon">📖</div>
+                    <div class="subject-name">{{ subject['name'] }}</div>
+                    <div class="subject-action">Start Exam →</div>
+                </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="table-container">
+                <div class="no-data">No subjects available yet.</div>
+            </div>
+        {% endif %}
+
+        <!-- Previous Results -->
+        <h3 class="section-title">📊 Previous Results</h3>
+
+        <div class="table-container">
+            {% if results %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Subject</th>
+                            <th>Date & Time</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ r['subject_name'] }}</td>
+                            <td>{{ r['date'] }}</td>
+                            <td>{{ r['score'] }} / {{ r['total'] }}</td>
+                            <td>{{ ((r['score'] / r['total']) * 100) | int }}%</td>
+                            <td>
+                                {% if (r['score'] / r['total']) >= 0.5 %}
+                                    <span class="badge badge-pass">✅ Pass</span>
+                                {% else %}
+                                    <span class="badge badge-fail">❌ Fail</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-data">You haven't taken any exams yet. Pick a subject above!</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>
