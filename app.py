@@ -1,13 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
 import sqlite3
 import random
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "exam_secret_key_123"
 
-DB_PATH = "exam.db"
+DB_PATH = os.environ.get(
+    "DB_PATH",
+    "/tmp/exam.db" if os.environ.get("VERCEL") else "exam.db",
+)
 
 # =====================
 # DATABASE CONNECTION
