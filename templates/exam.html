@@ -9,8 +9,8 @@
 <body>
 
     <div class="exam-header">
-        <h2>📝 {{ subject['name'] }} Exam</h2>
-        <div class="timer-box" id="timer">⏱ 10:00</div>
+        <h2>{{ subject['name'] }} Exam</h2>
+        <div class="timer-box" id="timer">{{ duration_minutes }}:00</div>
     </div>
 
     <div class="exam-container">
@@ -53,12 +53,15 @@
             {% endfor %}
 
             <div class="submit-section">
-                <button type="submit" class="btn btn-green">✅ Submit Exam</button>
+                <button type="submit" class="btn btn-green">Submit Exam</button>
             </div>
 
         </form>
     </div>
 
+    <script>
+        const examDurationSeconds = {{ duration_minutes }} * 60;
+    </script>
     <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
 
 </body>

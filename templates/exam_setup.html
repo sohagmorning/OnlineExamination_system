@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Settings - {{ subject['name'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>{{ subject['name'] }} Exam</h2>
+            <p class="subtitle">Choose how many questions you want to answer and the time limit.</p>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="question_count">Number of questions</label>
+                    <select id="question_count" name="question_count" required>
+                        {% for count in [5, 10, 15, 20, available_questions] | unique | sort %}
+                            {% if count <= available_questions %}
+                                <option value="{{ count }}" {% if count == available_questions %}selected{% endif %}>
+                                    {{ count }} questions
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="duration_minutes">Time limit</label>
+                    <select id="duration_minutes" name="duration_minutes" required>
+                        {% for minutes in [5, 10, 15, 20, 30, 45, 60] %}
+                            <option value="{{ minutes }}" {% if minutes == 10 %}selected{% endif %}>
+                                {{ minutes }} minutes
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-green">Start Exam</button>
+                <a href="{{ url_for('exam_portal') }}" class="btn">Back</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,14 +1,13 @@
-// Exam Timer - 10 minutes
-var totalSeconds = 10 * 60;
+// Exam Timer - duration is provided by the exam settings page.
+var totalSeconds = (typeof examDurationSeconds === "number")
+    ? examDurationSeconds
+    : 10 * 60;
 
 function updateTimer() {
     var minutes = Math.floor(totalSeconds / 60);
     var seconds = totalSeconds % 60;
 
-    var display = "⏱ " 
-        + (minutes < 10 ? "0" : "") + minutes 
-        + ":" 
-        + (seconds < 10 ? "0" : "") + seconds;
+    var display = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 
     document.getElementById("timer").textContent = display;
 
@@ -24,8 +23,8 @@ function updateTimer() {
 
     // Time up - auto submit
     if (totalSeconds <= 0) {
-        document.getElementById("timer").textContent = "⏱ 00:00";
-        alert("সময় শেষ! পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হচ্ছে।");
+        document.getElementById("timer").textContent = "00:00";
+        alert("Time is up! Your exam is being submitted automatically.");
         document.getElementById("examForm").submit();
         return;
     }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Results - Online Examination System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h2>Online Examination System</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="{{ url_for('exam_portal') }}">Exam Portal</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Instant Results</h2>
+            <p>Results from {{ total_results }} completed exam attempt{% if total_results != 1 %}s{% endif %}.</p>
+        </div>
+
+        <div class="result-filters">
+            <form method="GET" action="{{ url_for('public_results') }}">
+                <label for="sort">Sort by</label>
+                <select id="sort" name="sort">
+                    <option value="username" {% if sort_by == 'username' %}selected{% endif %}>User name (A-Z)</option>
+                    <option value="score" {% if sort_by == 'score' %}selected{% endif %}>Highest result</option>
+                </select>
+
+                <label for="limit">Show</label>
+                <input id="limit" name="limit" type="number" min="1" step="1"
+                       value="{{ limit_value }}" aria-label="Number of results to show" required>
+                <span class="filter-suffix">results</span>
+                <button type="submit" class="btn">Apply</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            {% if results %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User name</th>
+                            <th>Subject</th>
+                            <th>Date &amp; Time</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ result['username'] }}</td>
+                                <td>{{ result['subject_name'] }}</td>
+                                <td>{{ result['date'] }}</td>
+                                <td>{{ result['score'] }} / {{ result['total'] }}</td>
+                                <td>{{ ((result['score'] / result['total']) * 100) | int }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-data">No exam results are available yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

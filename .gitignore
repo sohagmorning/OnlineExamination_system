@@ -1,4 +1,5 @@
 exam.db
+*.sqbpro
 __pycache__/
 *.pyc
 *.pyo

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Exam System</title>
+    <title>Online Examination System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <header>
         <div class="logo">
-            <h2>Online Exam System</h2>
+            <h2>Online Examination System</h2>
         </div>
         <nav>
             <ul>
@@ -26,7 +26,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Welcome To Online Exam System</h1>
+            <h1>Welcome To Online Examination System</h1>
             <p>Take exams anytime, anywhere with a secure and modern platform.</p>
             <div class="hero-buttons">
                 <a href="/login" class="btn">Student Login</a>
@@ -38,18 +38,18 @@
 
     <!-- Features -->
     <section class="features">
-        <div class="card">
+        <a href="{{ url_for('exam_portal') }}" class="card feature-card">
             <h3>Online Exam</h3>
             <p>Attend MCQ exams from anywhere.</p>
-        </div>
-        <div class="card">
+        </a>
+        <a href="{{ url_for('public_results') }}" class="card feature-card">
             <h3>Instant Result</h3>
             <p>View your result immediately after submission.</p>
-        </div>
-        <div class="card">
+        </a>
+        <a href="{{ url_for('login') }}" class="card feature-card">
             <h3>Login</h3>
             <p>Student and Teacher have separate login panels.</p>
-        </div>
+        </a>
     </section>
 
 </body>

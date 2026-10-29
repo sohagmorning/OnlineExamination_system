@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Portal - Online Examination System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h2>Online Examination System</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="{{ url_for('public_results') }}">Results</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Exam Portal</h2>
+            <p>Select a subject to start your exam.</p>
+        </div>
+
+        {% if subjects %}
+            <div class="subject-grid">
+                {% for subject in subjects %}
+                    {% if session.get('role') == 'student' %}
+                        <a href="{{ url_for('exam', subject_id=subject['id']) }}" class="subject-card">
+                    {% else %}
+                        <a href="#" class="subject-card exam-locked-link" data-subject="{{ subject['name'] }}">
+                    {% endif %}
+                            <div class="subject-icon"></div>
+                            <div class="subject-name">{{ subject['name'] }}</div>
+                            <div class="subject-action">
+                                {% if subject['question_count'] %}
+                                    {{ subject['question_count'] }} questions - Start Exam
+                                {% else %}
+                                    No questions available
+                                {% endif %}
+                            </div>
+                        </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="table-container">
+                <div class="no-data">No subjects available yet.</div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal-backdrop" id="registerModal" hidden>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="registerModalTitle">
+            <button type="button" class="modal-close" id="closeRegisterModal" aria-label="Close">&times;</button>
+            <h2 id="registerModalTitle">Registration required</h2>
+            <p id="registerModalMessage">Please register and login before starting an exam.</p>
+            <div class="modal-actions">
+                <a href="{{ url_for('register') }}" class="btn btn-green">Register</a>
+                <a href="{{ url_for('login') }}" class="btn">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("registerModal");
+        const closeButton = document.getElementById("closeRegisterModal");
+        const message = document.getElementById("registerModalMessage");
+
+        document.querySelectorAll(".exam-locked-link").forEach((link) => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                message.textContent = `Please register and login before starting the ${link.dataset.subject} exam.`;
+                modal.hidden = false;
+            });
+        });
+
+        closeButton.addEventListener("click", () => {
+            modal.hidden = true;
+        });
+
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.hidden = true;
+            }
+        });
+    </script>
+</body>
+</html>

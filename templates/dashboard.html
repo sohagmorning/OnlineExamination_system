@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Online Exam System</title>
+    <title>Dashboard - Online Examination System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
     <header>
         <div class="logo">
-            <h2>Online Exam System</h2>
+            <h2>Online Examination System</h2>
         </div>
         <nav>
             <ul>
+                <li><a href="/">Home</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/admin">Admin</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
@@ -37,16 +39,51 @@
             <p>Select a subject below to start your exam.</p>
         </div>
 
+        <div class="dashboard-overview">
+            <div class="profile-card">
+                <h3>My Information</h3>
+                <p><strong>Username:</strong> {{ user['username'] }}</p>
+                <p><strong>Account type:</strong> Student</p>
+                <p><strong>Exam attempts:</strong> {{ performance['total_exams'] }}</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value">{{ performance['total_exams'] }}</span>
+                    <span class="stat-label">Total Exams</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ performance['average_percentage'] | round(1) }}%</span>
+                    <span class="stat-label">Average Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ performance['highest_percentage'] | round(1) }}%</span>
+                    <span class="stat-label">Highest Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ performance['passed_exams'] }}</span>
+                    <span class="stat-label">Passed Exams</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Subject Cards -->
-        <h3 class="section-title">📚 Choose a Subject</h3>
+        <h3 class="section-title">Choose a Subject</h3>
 
         {% if subjects %}
+            {% set completed_subjects = results | map(attribute='subject_id') | list %}
             <div class="subject-grid">
                 {% for subject in subjects %}
                 <a href="/exam/{{ subject['id'] }}" class="subject-card">
-                    <div class="subject-icon">📖</div>
+                    <div class="subject-icon"></div>
                     <div class="subject-name">{{ subject['name'] }}</div>
-                    <div class="subject-action">Start Exam →</div>
+                    <div class="subject-action">
+                        {% if subject['id'] in completed_subjects %}
+                            <span class="badge badge-pass">Completed</span>
+                        {% else %}
+                            Not attempted
+                        {% endif %}
+                        <br>Start Exam →
+                    </div>
                 </a>
                 {% endfor %}
             </div>
@@ -57,7 +94,7 @@
         {% endif %}
 
         <!-- Previous Results -->
-        <h3 class="section-title">📊 Previous Results</h3>
+        <h3 class="section-title">Previous Results</h3>
 
         <div class="table-container">
             {% if results %}
@@ -82,9 +119,9 @@
                             <td>{{ ((r['score'] / r['total']) * 100) | int }}%</td>
                             <td>
                                 {% if (r['score'] / r['total']) >= 0.5 %}
-                                    <span class="badge badge-pass">✅ Pass</span>
+                                    <span class="badge badge-pass">Pass</span>
                                 {% else %}
-                                    <span class="badge badge-fail">❌ Fail</span>
+                                    <span class="badge badge-fail">Fail</span>
                                 {% endif %}
                             </td>
                         </tr>
